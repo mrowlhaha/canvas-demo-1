@@ -2,14 +2,27 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" />
     <title>画板</title>
   </head>
   <body>
+    <div class="colorPan">
+      <div style="background-color: #f4a" onclick="changeColor('#f4a')"></div>
+      <div style="background-color: #ff0" onclick="changeColor('#ff0')"></div>
+      <div style="background-color: #3f3" onclick="changeColor('#3f3')"></div>
+      <div style="background-color: #06f" onclick="changeColor('#06f')"></div>
+      <div style="background-color: #ecf" onclick="changeColor('#ecf')"></div>
+      <div class="add button" onclick="addLineWidth()">+</div>
+      <div class="minus button" onclick="minusLineWidth()">-</div>
+    </div>
+
     <!-- 在body中放置一个canvas -->
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" width="100vw" height="100vh"></canvas>
     <script>
       // 初始化
       let canvas = document.getElementById("canvas");
@@ -22,9 +35,11 @@
       // 不描边
       // 线段末端设置为圆角
       let ctx = canvas.getContext("2d");
-      ctx.fillStyle = "black";
-      ctx.strokeStyle = "none";
-      ctx.lineWidth = 4;
+      let paintColor = "#333";
+      let lineWidth = 4;
+      ctx.fillStyle = paintColor;
+      ctx.strokeStyle = paintColor;
+      ctx.lineWidth = lineWidth;
       ctx.lineCap = "round";
       // 设置一个painting值，作为开关，当按下鼠标时才能画画
       let painting = false;
@@ -36,6 +51,28 @@
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
+      }
+      //画笔加粗
+      function addLineWidth() {
+        console.log(lineWidth);
+        if (lineWidth < 10) {
+          lineWidth++;
+          ctx.lineWidth = lineWidth;
+        }
+      }
+      //画笔减细
+      function minusLineWidth() {
+        if (lineWidth > 1) {
+          lineWidth--;
+          ctx.lineWidth = lineWidth;
+        }
+      }
+      //点击改变颜色
+      function changeColor(e) {
+        paintColor = e;
+        ctx.fillStyle = paintColor;
+        ctx.strokeStyle = paintColor; //不知道为什么，这一句没加，我的颜色一直不能改，按理说不影响的
+        console.log(ctx.fillStyle);
       }
       //   检测是否为触屏设备
       var isTouchDevice = "ontouchstart" in document.documentElement;
